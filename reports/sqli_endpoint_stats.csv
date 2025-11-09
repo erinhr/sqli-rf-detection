@@ -1,0 +1,12 @@
+endpoint,total,ok_total,ok_rate,error_ok,error_total,boolean_ok,boolean_total,time_ok,time_total,union_ok,union_total
+/createdb,24,2,8.33,2,15,0,5,0,3,0,1
+/users/v1,24,0,0.0,0,15,0,5,0,3,0,1
+/users/v1/_debug,24,0,0.0,0,15,0,5,0,3,0,1
+/users/v1/register,48,0,0.0,0,30,0,10,0,6,0,2
+/users/v1/login,48,0,0.0,0,30,0,10,0,6,0,2
+/books/v1,48,0,0.0,0,30,0,10,0,6,0,2
+/books/v1/{book_title},24,1,4.17,0,15,0,5,0,3,1,1
+/me,24,0,0.0,0,15,0,5,0,3,0,1
+/users/v1/{username},48,9,18.75,6,30,3,10,0,6,0,2
+/users/v1/{username}/email,24,0,0.0,0,15,0,5,0,3,0,1
+/users/v1/{username}/password,24,0,0.0,0,15,0,5,0,3,0,1

@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  vampi_secure:
+    image: erev0s/vampi:latest
+    container_name: vampi_secure
+    environment:
+      vulnerable: "0"          # <-- LOWERCASE 'vulnerable' ; 0 = NOT vulnerable
+      tokentimetolive: "300"
+      FLASK_ENV: "production"  # disable Werkzeug debug & stacktrace
+    ports:
+      - "5001:5000"
+    restart: unless-stopped
+
+  vampi_insecure:
+    image: erev0s/vampi:latest
+    container_name: vampi_insecure
+    environment:
+      vulnerable: "1"          # 1 = vulnerable
+      tokentimetolive: "60"
+      FLASK_ENV: "development"
+    ports:
+      - "5002:5000"
+    restart: unless-stopped

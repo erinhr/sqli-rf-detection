@@ -1,0 +1,15 @@
+ground_truth_id,method,endpoint,where,parameter,vulnerable,technique,notes,payload_true,payload_false
+GT0001,GET,/,query,q,unknown,,,,
+GT0002,GET,/books/v1,query,q,unknown,,,,
+GT0003,POST,/books/v1,body,book_title,unknown,,,,
+GT0004,GET,/books/v1/{{param}},path,,unknown,,,,
+GT0005,GET,/createdb,query,q,unknown,,,,
+GT0006,GET,/me,query,q,unknown,,,,
+GT0007,GET,/users/v1,query,q,unknown,,,,
+GT0008,GET,/users/v1/_debug,query,q,unknown,,,,
+GT0009,POST,/users/v1/login,body,username,unknown,,,,
+GT0010,POST,/users/v1/register,body,username,unknown,,,,
+GT0011,DELETE,/users/v1/{{param}},path,,True,"boolean,error",| VERIFIED_MANUAL: /users/v1/{username} vulnerable (error+boolean),' OR '1'='1,' OR '1'='2
+GT0012,GET,/users/v1/{{param}},path,,True,"boolean,error",| VERIFIED_MANUAL: /users/v1/{username} vulnerable (error+boolean),' OR '1'='1,' OR '1'='2
+GT0013,PUT,/users/v1/{{param}}/email,path,,unknown,,,,
+GT0014,PUT,/users/v1/{{param}}/password,path,,unknown,,,,

